@@ -9,5 +9,14 @@
         android:id="@+id/newsList"
         android:name="com.example.newsapp.NewsList"
         android:label="fragment_news_list"
-        tools:layout="@layout/fragment_news_list" />
+        tools:layout="@layout/fragment_news_list" >
+        <action
+            android:id="@+id/action_newsList_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemDetailsFragment"
+        android:name="com.example.newsapp.ItemDetailsFragment"
+        android:label="item_details_fragment"
+        tools:layout="@layout/item_details_fragment" />
 </navigation>

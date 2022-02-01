@@ -1,5 +1,6 @@
 package com.example.newsapp
 
+import androidx.lifecycle.LiveData
 import com.example.newsapp.model.NewsDataViewModel
 import com.example.newsapp.model.NewsItem
 import com.github.kittinunf.fuel.core.FuelManager
@@ -16,7 +17,7 @@ class ApiInterface {
             "https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey=9454289c0f374c4f8f3532dc89cde4ed"
 
         //The error is that the fuel method is synchronous not asynchronous
-        suspend fun getNews() : ArrayList<NewsItem>  {
+        fun getNews(liveData: NewsDataViewModel) : ArrayList<NewsItem>  {
             val newsItems: ArrayList<NewsItem> = ArrayList<NewsItem>()
 
             FuelManager.instance.baseHeaders = mapOf("User-Agent" to "Mozilla/5.0")
@@ -50,7 +51,7 @@ class ApiInterface {
                                 newsItems.add(newItem)
                             }
 
-
+                            liveData.getNewData().postValue(newsItems)
                         }
                     }
                 }

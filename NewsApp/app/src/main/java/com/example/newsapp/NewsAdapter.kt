@@ -6,12 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.HttpException
+import com.example.newsapp.model.Communicator
 import com.example.newsapp.model.NewsItem
 
 class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragment) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
@@ -36,13 +41,26 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
 
         // sets the text to the textview from our itemHolder class
         holder.textView.text = newsItem.title
-        try {
-            Glide.with(context).load(newsItem.urlToImage).into(holder.imageNews);
-        }
-        catch(exception: HttpException) {
-            print("Glide catch")
-            holder.imageNews.setImageResource(R.drawable.not_found_image_background)
-        }
+
+        holder.btn_viewDetails.setOnClickListener(View.OnClickListener {
+            // Code here executes on main thread after user presses button
+            //Toast.makeText(activity?.applicationContext, R.string.toast_description, Toast.LENGTH_SHORT).show()
+//            switchToSecondoActivity(it)
+            println("item details fragment")
+
+            val communicator = ViewModelProviders.of(context.requireActivity())
+                .get(Communicator::class.java)
+
+            communicator.setMessage(newsItem)
+
+            context.findNavController().navigate(R.id.itemDetailsFragment)
+        })
+
+        Glide.with(context)
+            .load(newsItem.urlToImage)
+            .error(R.mipmap.not_found_image)
+            .into(holder.imageNews);
+
 
     }
 
@@ -55,5 +73,6 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val textView: TextView = itemView.findViewById(R.id.news_item_title)
         val imageNews: ImageView = itemView.findViewById(R.id.news_item_image)
+        val btn_viewDetails: Button = itemView.findViewById(R.id.btn_viewDetails)
     }
 }

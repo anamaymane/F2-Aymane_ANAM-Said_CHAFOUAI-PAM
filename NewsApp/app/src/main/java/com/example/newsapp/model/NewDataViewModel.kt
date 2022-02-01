@@ -4,7 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class NewsDataViewModel : ViewModel() {
-    val newsData : MutableLiveData<List<NewsItem>> by lazy {
-        MutableLiveData<List<NewsItem>>()
+    val newsData = MutableLiveData<List<NewsItem>>()
+
+    fun getNewData(): MutableLiveData<List<NewsItem>> {
+        return newsData
     }
 }
