@@ -1,51 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ItemDetailsFragment"
-    android:layout_marginTop="20dp">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@mipmap/not_found_image_foreground" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ItemDetailsFragment"
+        android:layout_marginTop="20dp">
 
-    <TextView
-        android:id="@+id/textView_title"
+        <ImageView
+            android:id="@+id/news_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/not_found_image_foreground"
+            android:layout_marginBottom="5dp"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:text="News title"
-        android:textSize="20dp"
-        />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ItemDetailsFragment"
 
-    <TextView
-        android:id="@+id/textView_date"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:text="01/02/2022"
-        android:textSize="20dp"
-        />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="20dp">
 
-    <TextView
-        android:id="@+id/textView_author"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:text="Smith anam"
-        android:textSize="20dp"
-        />
+        <TextView
+            android:id="@+id/textView_title"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="News title"
+            android:textSize="20dp"
+            android:layout_marginBottom="5dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/darker_gray" />
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            >
+
+        <TextView
+            android:id="@+id/textView_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Smith anamddfdfdfdfdfdfdffdfdfdfdfdf"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textView_date"
+            android:layout_width="match_parent"
+            android:textStyle="italic"
+            android:layout_height="wrap_content"
+            android:text="01/02/2022"
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            android:layout_weight="1"
+            />
+
+        </LinearLayout>
+
+        <TextView android:id="@+id/label_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description:"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:textSize="20dp"
+            />
+
+        <TextView
+            android:id="@+id/textView_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Content"
+            android:textSize="20dp"
+            />
 
 
-    <TextView
-        android:id="@+id/textView_description"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:text="Description"
-        android:textSize="20dp"
-        />
+        <TextView
+            android:id="@+id/textView_description"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Description"
+            android:textSize="20dp"
+            />
 
+    </LinearLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

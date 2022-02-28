@@ -40,9 +40,14 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
         val newsItem = mList[position]
 
         // sets the text to the textview from our itemHolder class
-        holder.textView.text = newsItem.title
+        holder.news_item_title.text = newsItem.title
 
-        holder.btn_viewDetails.setOnClickListener(View.OnClickListener {
+        val endIndex = if (newsItem.description.length > 90) 90 else newsItem.description.length - 1
+        holder.news_item_description.text = newsItem.description.substring(0, endIndex) + "..."
+
+        holder.news_item_date.text = newsItem.publishedAt.substring(0, 10)
+
+        holder.card.setOnClickListener(View.OnClickListener {
             // Code here executes on main thread after user presses button
             //Toast.makeText(activity?.applicationContext, R.string.toast_description, Toast.LENGTH_SHORT).show()
 //            switchToSecondoActivity(it)
@@ -54,13 +59,13 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
             communicator.setMessage(newsItem)
 
             context.findNavController().navigate(R.id.itemDetailsFragment)
-        })
+        });
+
 
         Glide.with(context)
             .load(newsItem.urlToImage)
             .error(R.mipmap.not_found_image)
             .into(holder.imageNews);
-
 
     }
 
@@ -71,8 +76,10 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
 
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val textView: TextView = itemView.findViewById(R.id.news_item_title)
+        val news_item_title: TextView = itemView.findViewById(R.id.news_item_title)
+        val news_item_date: TextView = itemView.findViewById(R.id.news_item_date)
+        val news_item_description: TextView = itemView.findViewById(R.id.news_item_description)
         val imageNews: ImageView = itemView.findViewById(R.id.news_item_image)
-        val btn_viewDetails: Button = itemView.findViewById(R.id.btn_viewDetails)
+        val card: View = itemView
     }
 }
