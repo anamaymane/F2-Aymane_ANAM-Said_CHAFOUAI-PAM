@@ -1,10 +1,14 @@
 package com.example.newsapp
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Parcelable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,6 +39,7 @@ class NewsList : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var recyclerview: RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,15 +53,18 @@ class NewsList : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        Log.e("error oncreate", "creation")
+
         // Inflate the layout for this fragment
         val inflater = inflater.inflate(R.layout.fragment_news_list, container, false)
 
+
         // getting the recyclerview by its id
-        val recyclerview = inflater.findViewById<RecyclerView>(R.id.recyclerview)
+        recyclerview = inflater.findViewById<RecyclerView>(R.id.recyclerview)
 
         // this creates a vertical layout Manager
-        recyclerview.layoutManager = LinearLayoutManager(activity)
-
+        recyclerview!!.layoutManager = LinearLayoutManager(activity)
 
         var data : List<NewsItem> = ArrayList<NewsItem>()
 
@@ -66,25 +74,62 @@ class NewsList : Fragment() {
 
         // This will pass the ArrayList to our Adapter
         val adapter = NewsAdapter(data, this)
-        recyclerview.adapter = adapter
+        recyclerview!!.adapter = adapter
 
         val newsDataViewModel = NewsDataViewModel()
 
         newsDataViewModel.getNewData().observe(viewLifecycleOwner, Observer {
-                println("Call back succeeded")
-                recyclerview.adapter = NewsAdapter(it, this)
+                recyclerview!!.adapter = NewsAdapter(it, this)
+                val progressBar: ProgressBar = inflater.findViewById(R.id.spinner_news)
+                progressBar.visibility = View.GONE
+                if(mBundleRecyclerViewState != null)
+                    restoreRecyclerState()
             }
         )
 
         ApiInterface.context = requireContext()    //The context is needed by Room
         ApiInterface.getNews(newsDataViewModel)
-
         return inflater
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Log.e("error onpause", "creation")
+
+        // Saving the state of the list in a static bunde
+        // so that we can restore the list state on rotation
+        mBundleRecyclerViewState = Bundle();
+        val mListState = recyclerview?.getLayoutManager()?.onSaveInstanceState();
+        mBundleRecyclerViewState!!.putParcelable(RECYCLER_VIEW_STATE_KEY, mListState);
+        Log.e("error onpause", "complete")
+    }
+
+    fun restoreRecyclerState() {
+
+        // Restoring the list state to handle
+        // rotation use case
+
+        Log.e("error onresume", "nbundle not null")
+        Handler().postDelayed(Runnable {
+            val mListState: Parcelable? = mBundleRecyclerViewState!!.getParcelable(RECYCLER_VIEW_STATE_KEY)
+            if(mListState != null)
+                Log.e("error onresume", "list not null")
+                recyclerview?.getLayoutManager()?.onRestoreInstanceState(mListState)
+                Log.e("error onresume", "complete")
+            }, 50)
     }
 
 
 
     companion object {
+
         const val id:Int = 555
+
+        @JvmStatic
+        var mBundleRecyclerViewState: Bundle? = null
+
+        @JvmStatic
+        final var RECYCLER_VIEW_STATE_KEY: String = "RECYCLER_VIEW_STATE_KEY"
     }
 }

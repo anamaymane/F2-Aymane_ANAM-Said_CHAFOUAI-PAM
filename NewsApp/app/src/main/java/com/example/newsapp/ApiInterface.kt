@@ -2,6 +2,7 @@ package com.example.newsapp
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import com.example.newsapp.database.NewsItemDatabase
 import com.example.newsapp.model.NewsDataViewModel
@@ -34,6 +35,8 @@ class ApiInterface {
             Log.i("fuel", "fuel request")
             url
                 .httpGet()
+                .timeoutRead(2000)
+                .timeout(2000)
                 .responseString { request, response, result ->
                     when (result) {
                         is Result.Failure -> {
