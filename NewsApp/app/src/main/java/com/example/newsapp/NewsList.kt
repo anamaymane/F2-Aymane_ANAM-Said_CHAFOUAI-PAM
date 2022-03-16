@@ -67,13 +67,16 @@ class NewsList : Fragment() {
         // This will pass the ArrayList to our Adapter
         val adapter = NewsAdapter(data, this)
         recyclerview.adapter = adapter
+
         val newsDataViewModel = NewsDataViewModel()
+
         newsDataViewModel.getNewData().observe(viewLifecycleOwner, Observer {
-            println("Call back succeeded")
-            recyclerview.adapter = NewsAdapter(it, this)
+                println("Call back succeeded")
+                recyclerview.adapter = NewsAdapter(it, this)
             }
         )
 
+        ApiInterface.context = requireContext()    //The context is needed by Room
         ApiInterface.getNews(newsDataViewModel)
 
         return inflater
