@@ -12,6 +12,18 @@
         android:layout_gravity="center">
     </ProgressBar>
 
+    <TextView
+        android:id="@+id/textView_no_internet_no_db"
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:text="@string/no_internet_no_db_message"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"

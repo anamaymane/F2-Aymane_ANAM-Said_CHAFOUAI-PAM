@@ -80,18 +80,7 @@ dependencies {
 
     // end Glide library
 
-    // --------- Library for making http requests ---------
-
-    //core
-    implementation "com.github.kittinunf.fuel:fuel:2.3.1"
-
-    // end Glide library
-
-    // --------- Library for parsing json ---------
-
-    implementation 'com.beust:klaxon:5.5'
-
-
+    
     // for passing arguments between fragments
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation "android.arch.lifecycle:viewmodel:1.1.0"
@@ -118,5 +107,13 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
+
+    // --------- Library for making http requests ---------
+
+    def ktor_version = "1.6.8"
+
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-cio:$ktor_version"
+
 
 }

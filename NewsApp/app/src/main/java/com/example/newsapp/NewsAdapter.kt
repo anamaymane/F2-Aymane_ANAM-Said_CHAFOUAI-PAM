@@ -21,9 +21,6 @@ import com.example.newsapp.model.NewsItem
 
 class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragment) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
-    fun setNewsItems(mList: List<NewsItem>) {
-        this.mList = mList
-    }
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view

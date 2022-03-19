@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,25 +37,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class NewsList : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
     private var recyclerview: RecyclerView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        Log.e("error oncreate", "creation")
 
         // Inflate the layout for this fragment
         val inflater = inflater.inflate(R.layout.fragment_news_list, container, false)
@@ -79,11 +69,20 @@ class NewsList : Fragment() {
         val newsDataViewModel = NewsDataViewModel()
 
         newsDataViewModel.getNewData().observe(viewLifecycleOwner, Observer {
-                recyclerview!!.adapter = NewsAdapter(it, this)
-                val progressBar: ProgressBar = inflater.findViewById(R.id.spinner_news)
-                progressBar.visibility = View.GONE
-                if(mBundleRecyclerViewState != null)
-                    restoreRecyclerState()
+
+            val progressBar: ProgressBar = inflater.findViewById(R.id.spinner_news)
+            progressBar.visibility = View.GONE
+
+                if(it.size == 0) {
+                    val noIntenetNoDbMessage: TextView = inflater.findViewById(R.id.textView_no_internet_no_db)
+                    noIntenetNoDbMessage.visibility = View.VISIBLE
+                }
+                else {
+                    recyclerview!!.adapter = NewsAdapter(it, this)
+                    if(mBundleRecyclerViewState != null)
+                        restoreRecyclerState()
+                }
+
             }
         )
 
@@ -95,14 +94,11 @@ class NewsList : Fragment() {
     override fun onPause() {
         super.onPause()
 
-        Log.e("error onpause", "creation")
-
         // Saving the state of the list in a static bunde
         // so that we can restore the list state on rotation
         mBundleRecyclerViewState = Bundle();
         val mListState = recyclerview?.getLayoutManager()?.onSaveInstanceState();
         mBundleRecyclerViewState!!.putParcelable(RECYCLER_VIEW_STATE_KEY, mListState);
-        Log.e("error onpause", "complete")
     }
 
     fun restoreRecyclerState() {
@@ -110,13 +106,10 @@ class NewsList : Fragment() {
         // Restoring the list state to handle
         // rotation use case
 
-        Log.e("error onresume", "nbundle not null")
         Handler().postDelayed(Runnable {
             val mListState: Parcelable? = mBundleRecyclerViewState!!.getParcelable(RECYCLER_VIEW_STATE_KEY)
             if(mListState != null)
-                Log.e("error onresume", "list not null")
                 recyclerview?.getLayoutManager()?.onRestoreInstanceState(mListState)
-                Log.e("error onresume", "complete")
             }, 50)
     }
 
@@ -130,6 +123,6 @@ class NewsList : Fragment() {
         var mBundleRecyclerViewState: Bundle? = null
 
         @JvmStatic
-        final var RECYCLER_VIEW_STATE_KEY: String = "RECYCLER_VIEW_STATE_KEY"
+        var RECYCLER_VIEW_STATE_KEY: String = "RECYCLER_VIEW_STATE_KEY"
     }
 }

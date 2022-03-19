@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ayman/Documents/projects/android-kotlin-zz3-newApp/NewsApp/app/src/main/res/layout/activity_main.xml" value="0.22916666666666666" />
         <entry key="..\:/Users/ayman/Documents/projects/android-kotlin-zz3-newApp/NewsApp/app/src/main/res/layout/fragment_news_list.xml" value="0.293" />
+        <entry key="..\:/Users/ayman/Documents/projects/android-kotlin-zz3-newApp/NewsApp/app/src/main/res/layout/item_details_fragment.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19882246376811594" />

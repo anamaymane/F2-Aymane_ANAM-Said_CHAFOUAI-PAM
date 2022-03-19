@@ -4,8 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-data class Source(val id: Int?, val name: String);
-
 @Entity(tableName = "news_item")
 data class NewsItem(
     @PrimaryKey(autoGenerate = true) var id: Long,

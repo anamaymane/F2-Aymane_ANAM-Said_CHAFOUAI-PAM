@@ -2,20 +2,26 @@ package com.example.newsapp
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import com.example.newsapp.database.NewsItemDatabase
 import com.example.newsapp.model.NewsDataViewModel
 import com.example.newsapp.model.NewsItem
+import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
+import io.ktor.client.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.json.JSONTokener
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.features.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 class ApiInterface {
 
@@ -27,68 +33,68 @@ class ApiInterface {
 
         lateinit var context: Context    //Context for interacting with room
 
+        val ktorHttpClient = HttpClient(CIO) {
+            install(HttpTimeout) {
+                requestTimeoutMillis = 2500
+                connectTimeoutMillis = 1500
+                socketTimeoutMillis = 1500
+            }
+        }
+
         //The error is that the fuel method is synchronous not asynchronous
         fun getNews(liveData: NewsDataViewModel): Unit {
+
             val newsItems: MutableList<NewsItem> = ArrayList<NewsItem>()
 
-            FuelManager.instance.baseHeaders = mapOf("User-Agent" to "Mozilla/5.0")
-            Log.i("fuel", "fuel request")
-            url
-                .httpGet()
-                .timeoutRead(2000)
-                .timeout(2000)
-                .responseString { request, response, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            val ex = result.getException().exception
-                            Log.e("result", "bool ${ex.javaClass.kotlin.qualifiedName}")
-                            if (ex is UnknownHostException || ex is SocketTimeoutException) {
-                                Log.e("error", "Socket timeout exception")
+            val job = GlobalScope.launch {
 
-                                // If there is no internet connection
-                                // We restore the last data that was
-                                // stored in the database when the
-                                // internet were still accessible
-                                val db = NewsItemDatabase(context)
-                                newsItems.addAll(db.newsItemDAO().getAll())
-                                liveData.getNewData().postValue(newsItems)
-                            }
+                try{
+                    val httpResponse: HttpResponse = ktorHttpClient.request(url) {
+                        method = HttpMethod.Get
+                    }
 
+                    if (httpResponse.status.value in 200..299) {
+                        val content = httpResponse.readText()
+                        val jsonObject = JSONTokener(content).nextValue() as JSONObject
+                        val articles = jsonObject.getJSONArray("articles")
+
+                        val articlesLength = articles.length() - 1
+                        (1..articlesLength).iterator().forEach {
+
+                            val article: JSONObject = articles[it] as JSONObject
+
+                            val newItem: NewsItem = NewsItem(
+                                it.toLong(),
+                                article["author"].toString(),
+                                article["title"].toString(),
+                                article["description"].toString(),
+                                article["url"].toString(),
+                                article["urlToImage"].toString(),
+                                article["publishedAt"].toString(),
+                                article["content"].toString()
+                            )
+                            newsItems.add(newItem)
                         }
-                        is Result.Success -> {
-                            Log.i("success", "Result success")
-                            val jsonObject = JSONTokener(result.get()).nextValue() as JSONObject
-                            val articles = jsonObject.getJSONArray("articles")
 
-                            val articlesLength = articles.length() - 1
-                            (1..articlesLength).iterator().forEach {
+                        liveData.getNewData().postValue(newsItems)
 
-                                val article: JSONObject = articles[it] as JSONObject
-
-                                val newItem: NewsItem = NewsItem(
-                                    it.toLong(),
-                                    article["author"].toString(),
-                                    article["title"].toString(),
-                                    article["description"].toString(),
-                                    article["url"].toString(),
-                                    article["urlToImage"].toString(),
-                                    article["publishedAt"].toString(),
-                                    article["content"].toString()
-                                )
-                                newsItems.add(newItem)
-                            }
-
-                            liveData.getNewData().postValue(newsItems)
-
-                            GlobalScope.launch {
-                                val db = NewsItemDatabase(context)
-                                db.newsItemDAO().deleteAll()
-                                db.newsItemDAO().insertAll(newsItems)
-                            }
+                        GlobalScope.launch {
+                            val db = NewsItemDatabase(context)
+                            db.newsItemDAO().deleteAll()
+                            db.newsItemDAO().insertAll(newsItems)
                         }
                     }
                 }
+                catch(ex: Exception) {
+                    // If there is no internet connection
+                    // We restore the last data that was
+                    // stored in the database when the
+                    // internet were still accessible
+                    val db = NewsItemDatabase(context)
+                    newsItems.addAll(db.newsItemDAO().getAll())
+                    liveData.getNewData().postValue(newsItems)
+                }
+            }
         }
-
     }
 }
