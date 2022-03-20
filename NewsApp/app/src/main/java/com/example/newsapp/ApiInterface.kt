@@ -1,22 +1,14 @@
 package com.example.newsapp
 
 import android.content.Context
-import android.util.Log
 import com.example.newsapp.database.NewsItemDatabase
 import com.example.newsapp.model.NewsDataViewModel
 import com.example.newsapp.model.NewsItem
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.result.Result
 import io.ktor.client.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import org.json.JSONTokener
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
-import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*

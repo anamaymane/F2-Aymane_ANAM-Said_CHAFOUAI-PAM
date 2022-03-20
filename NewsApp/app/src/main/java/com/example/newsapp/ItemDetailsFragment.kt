@@ -9,12 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsapp.model.Communicator
 import com.example.newsapp.model.NewsItem
-import org.w3c.dom.Text
 
 
 /**

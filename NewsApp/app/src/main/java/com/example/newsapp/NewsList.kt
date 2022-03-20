@@ -3,7 +3,6 @@ package com.example.newsapp
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.model.NewsDataViewModel
 import com.example.newsapp.model.NewsItem
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.result.Result
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
-import org.json.JSONObject
-import org.json.JSONTokener
 
 
 // TODO: Rename parameter arguments, choose names that match

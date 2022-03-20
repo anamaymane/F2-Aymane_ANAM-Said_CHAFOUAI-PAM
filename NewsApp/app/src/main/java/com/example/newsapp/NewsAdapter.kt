@@ -1,21 +1,16 @@
 package com.example.newsapp
 
-import android.content.Context
-import android.net.Uri
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.HttpException
 import com.example.newsapp.model.Communicator
 import com.example.newsapp.model.NewsItem
 
@@ -39,7 +34,7 @@ class NewsAdapter(private var mList: List<NewsItem>, private val context: Fragme
         // sets the text to the textview from our itemHolder class
         holder.news_item_title.text = newsItem.title
 
-        val endIndex = if (newsItem.description.length > 90) 90 else newsItem.description.length - 1
+        val endIndex = if (newsItem.description.length > 90) 90 else newsItem.description.length
         holder.news_item_description.text = newsItem.description.substring(0, endIndex) + "..."
 
         holder.news_item_date.text = newsItem.publishedAt.substring(0, 10)
